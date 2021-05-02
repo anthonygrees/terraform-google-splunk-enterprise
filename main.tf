@@ -18,21 +18,25 @@ terraform {
 }
 
 provider "google" {
+  credentials = file("${var.creds}")
+
   project = var.project
   region  = var.region
-  version = "~> 2.14"
+#  version = "~> 2.14"
 }
 
 provider "google-beta" {
+  credentials = file("${var.creds}")
+  
   project = var.project
   region  = var.region
-  version = "~> 2.14"
+#  version = "~> 2.14"
 }
 
 locals {
   splunk_package_name = "splunk-8.0.5-a1a6394cc5ae-Linux-x86_64.tgz"
   splunk_package_url = "http://download.splunk.com/products/splunk/releases/8.0.5/linux/${local.splunk_package_name}"
-  splunk_cluster_master_name = "splunk-cm"
+  splunk_cluster_master_name = "splunk-cluster-master"
   zone    = var.zone == "" ? data.google_compute_zones.available.names[0] : var.zone
 }
 
@@ -60,7 +64,7 @@ data "google_compute_zones" "available" {
 }
 
 output "search_head_cluster_url" {
-  value = "http://${google_compute_global_address.search_head_cluster_address.address}"
+  value = "Web Login - http://${google_compute_global_address.search_head_cluster_address.address}"
 }
 
 output "search_head_deployer_url" {
@@ -68,7 +72,7 @@ output "search_head_deployer_url" {
 }
 
 output "indexer_cluster_master_url" {
-  value = "http://${google_compute_instance.splunk_cluster_master.network_interface.0.access_config.0.nat_ip}:8000"
+  value = "http://${google_compute_instance.splunk_cluster_master.network_interface.0.access_config.0.nat_ip}:8000/en-US/manager/system/clustering?tab=peers"
 }
 
 output "indexer_cluster_hec_url" {

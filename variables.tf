@@ -24,6 +24,11 @@ variable "zone" {
   default = ""
 }
 
+variable "creds" {
+  description = "Link to your GCP Cred"
+  default = ""
+}
+
 variable "splunk_idx_cluster_size" {
   description = "Number of nodes in Splunk indexer cluster"
   default     = 3
